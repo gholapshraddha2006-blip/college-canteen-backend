@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -15,11 +15,8 @@ let menuData = [
   { id: 3, name: "Indori Poha", category: "Snacks", price: 25.00, isAvailable: true, prepTime: "5 mins", image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=400&q=80" },
   { id: 4, name: "Vegetable Upma", category: "Snacks", price: 30.00, isAvailable: true, prepTime: "6 mins", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=400&q=80" },
   { id: 5, name: "Crispy Vegetable Samosa", category: "Snacks", price: 15.00, isAvailable: true, prepTime: "4 mins", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80" },
-  { id: 6, name: "Paneer Butter Masala Bowl", category: "Meals", price: 120.00, isAvailable: true, prepTime: "12 mins", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80" }
-]
-  app.get('/api/menu', (req, res) => {
-    res.json(menuData);
-});;
+  { id: 6, name: "Paneer Butter Masala Bowl", category: "Meals", price: 120.00, isAvailable: time = true, prepTime: "12 mins", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80" }
+];
 
 let orders = [
   {
@@ -35,26 +32,22 @@ let orders = [
 
 // API Endpoints
 app.get('/api/menu', (req, res) => {
-  res.json({ success: true, data: menuData });
+  res.json(menuData);
 });
 
 app.get('/api/orders', (req, res) => {
-  res.json({ success: true, data: orders });
+  res.json(orders);
 });
 
 app.post('/api/orders', (req, res) => {
-  const { studentName, items, total, slot } = req.body;
-  const newOrder = {
-    id: Math.floor(100 + Math.random() * 900).toString(),
-    studentName: studentName || "Student User",
-    items,
-    total,
-    status: "PENDING",
-    slot,
-    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  const newOrder = { 
+    id: Date.now().toString(), 
+    ...req.body, 
+    status: "PREPARING", 
+    time: new Date().toLocaleTimeString() 
   };
-  orders.unshift(newOrder);
-  res.status(201).json({ success: true, order: newOrder });
+  orders.push(newOrder);
+  res.status(201).json(newOrder);
 });
 
 app.patch('/api/orders/:id/status', (req, res) => {
@@ -63,11 +56,11 @@ app.patch('/api/orders/:id/status', (req, res) => {
   const order = orders.find(o => o.id === id);
   if (order) {
     order.status = status;
-    return res.json({ success: true, order });
+    return res.json(order);
   }
-  res.status(404).json({ success: false, message: "Order not found" });
+  res.status(404).json({ message: "Order not found" });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
