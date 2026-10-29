@@ -16,7 +16,10 @@ let menuData = [
   { id: 4, name: "Vegetable Upma", category: "Snacks", price: 30.00, isAvailable: true, prepTime: "6 mins", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=400&q=80" },
   { id: 5, name: "Crispy Vegetable Samosa", category: "Snacks", price: 15.00, isAvailable: true, prepTime: "4 mins", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80" },
   { id: 6, name: "Paneer Butter Masala Bowl", category: "Meals", price: 120.00, isAvailable: true, prepTime: "12 mins", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=400&q=80" }
-];
+]
+  app.get('/api/menu', (req, res) => {
+    res.json(menuData);
+});;
 
 let orders = [
   {
